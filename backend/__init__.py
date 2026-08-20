@@ -1,0 +1,2 @@
+"""Postbank comparison backend package."""
+

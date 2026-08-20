@@ -1,0 +1,9 @@
+These DOCX files are synthetic test fixtures for automated comparison tests.
+
+They must not contain real customer, employee, account, transaction, institution,
+or confidential Postbank information. If a fixture is replaced, verify that the new
+document is synthetic before committing it to source control.
+
+The Original_Postbank_Test_Letter and Revised_Postbank_Test_Letter pair supports the
+29-change ground-truth regression test. The simple and table pairs support focused
+API and comparison behaviour tests.

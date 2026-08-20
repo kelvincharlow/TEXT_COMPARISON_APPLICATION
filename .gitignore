@@ -1,0 +1,29 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+poc/.engine-cache/
+backend/.runtime/
+frontend/node_modules/
+frontend/dist/
+*.log
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
+
+# Local configuration and credentials. Example configuration remains shareable.
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Local working documentation; intentionally excluded from this repository for now.
+README.md
+PROJECT_STRUCTURE.md
+
+# Sample inputs and generated redlines may contain sensitive information.
+poc/samples/*.docx
+poc/outputs/*
+!poc/samples/.gitkeep
+!poc/outputs/.gitkeep

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "simple_letter",
+    "original": "samples/simple_original.docx",
+    "revised": "samples/simple_revised.docx",
+    "expected_changes": [
+      "Date changed from 19 August 2026 to 20 August 2026",
+      "The word 'written' was inserted",
+      "14 days changed to 30 days",
+      "A new reference-instruction paragraph was inserted"
+    ]
+  },
+  {
+    "id": "table_letter",
+    "original": "samples/table_original.docx",
+    "revised": "samples/table_revised.docx",
+    "expected_changes": [
+      "REF-100 changed to REF-101",
+      "Account review status changed from Pending to Complete",
+      "A Signature check table row was inserted"
+    ]
+  }
+]

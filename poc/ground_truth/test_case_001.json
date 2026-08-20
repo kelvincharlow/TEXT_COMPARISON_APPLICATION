@@ -1,0 +1,43 @@
+{
+  "id": "postbank_test_letter_001",
+  "counting_policy": "One semantic change per changed paragraph, field, table cell, inserted/removed paragraph, or inserted/removed table row.",
+  "expected_summary": {
+    "total_changes": 29,
+    "additions": 3,
+    "deletions": 0,
+    "modifications": 26,
+    "heavily_revised": 1
+  },
+  "changes": [
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":2,"row_index":1,"cell_index":2},"original_contains":"PB/OPS/TEST/2026/047","revised_contains":"PB/OPS/TEST/2026/047-B"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":2,"row_index":2,"cell_index":2},"original_contains":"19 August 2026","revised_contains":"21 August 2026"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":2,"row_index":3,"cell_index":2},"original_contains":"Government Services Unit","revised_contains":"Government Services Coordination Unit"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":2,"row_index":4,"cell_index":2},"original_contains":"Implementation schedule","revised_contains":"Revised implementation schedule"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"15 August 2026","revised_contains":"17 August 2026"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"fourteen (14) calendar days","revised_contains":"thirty (30) calendar days"},
+    {"type":"modification","severity":"heavily_revised","location":{"part":"document","container":"paragraph"},"original_contains":"For the initial pilot","revised_contains":"To support exception handling"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":2,"cell_index":2},"original_contains":"Government Services Unit","revised_contains":"Government Services Coordination Unit"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":2,"cell_index":3},"original_contains":"22 August 2026","revised_contains":"24 August 2026"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":3,"cell_index":3},"original_contains":"25 August 2026","revised_contains":"27-28 August 2026"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":4,"cell_index":3},"original_contains":"28 August 2026","revised_contains":"2 September 2026"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":5,"cell_index":3},"original_contains":"1 September 2026","revised_contains":"7 September 2026"},
+    {"type":"addition","location":{"part":"document","container":"table_row","table_index":3,"row_index":6},"revised_contains":"Mid-pilot review"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":3,"row_index":7,"cell_index":3},"original_contains":"15 September 2026","revised_contains":"6 October 2026"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"amount, and authorized officer","revised_contains":"purpose of payment"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"KES 5,000,000","revised_contains":"KES 3,000,000"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"shared by email","revised_contains":"approved secure channel"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"six months","revised_contains":"twelve months"},
+    {"type":"addition","location":{"part":"document","container":"paragraph"},"revised_contains":"Any discrepancy involving an account number"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"at the end of the pilot","revised_contains":"every Friday during the pilot"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":4,"row_index":2,"cell_index":2},"original_contains":"KES 5,000,000","revised_contains":"KES 3,000,000"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":4,"row_index":3,"cell_index":2},"original_contains":"KES 25,000,000","revised_contains":"KES 20,000,000"},
+    {"type":"modification","location":{"part":"document","container":"table_cell","table_index":4,"row_index":4,"cell_index":2},"original_contains":"Not permitted","revised_contains":"30 minutes after cut-off"},
+    {"type":"addition","location":{"part":"document","container":"table_row","table_index":4,"row_index":5},"revised_contains":"Acknowledgement of material exception"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"confirmation by 21 August 2026","revised_contains":"confirmation by 26 August 2026"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"Manager, Operations","revised_contains":"Acting Manager, Operations Coordination"},
+    {"type":"modification","location":{"part":"document","container":"paragraph"},"original_contains":"Original test version","revised_contains":"Revised test version"},
+    {"type":"modification","location":{"part":"header1","container":"paragraph"},"original_contains":"Classification: INTERNAL","revised_contains":"Classification: INTERNAL - TEST"},
+    {"type":"modification","location":{"part":"footer1","container":"paragraph"},"original_contains":"Delete after testing","revised_contains":"Delete after validation"}
+  ]
+}
+
