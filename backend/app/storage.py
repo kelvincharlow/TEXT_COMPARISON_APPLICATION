@@ -26,6 +26,10 @@ class ComparisonStore:
         self.root.mkdir(parents=True, exist_ok=True)
 
     def create_session(self) -> tuple[str, Path]:
+        # The runtime directory may be removed by maintenance while the API is
+        # still running. Recreate it for every new session instead of relying
+        # only on application-startup initialization.
+        self.root.mkdir(parents=True, exist_ok=True)
         comparison_id = str(uuid.uuid4())
         session_path = self.root / comparison_id
         session_path.mkdir(mode=0o700)
@@ -80,4 +84,3 @@ class ComparisonStore:
                 continue
             if candidate.stat().st_mtime + self.ttl_seconds <= now:
                 shutil.rmtree(candidate, ignore_errors=True)
-
