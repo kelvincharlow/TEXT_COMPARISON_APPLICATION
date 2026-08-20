@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -14,6 +15,8 @@ from poc.compare_documents import DocumentValidationError
 
 from .service import run_comparison
 from .storage import ComparisonStore
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_STORAGE_ROOT = Path(__file__).resolve().parents[1] / ".runtime"
 MAX_UPLOAD_BYTES = int(os.getenv("POSTBANK_MAX_UPLOAD_BYTES", str(25 * 1024 * 1024)))
@@ -90,6 +93,10 @@ def create_app(storage_root: Path | None = None, ttl_seconds: int | None = None)
             store.delete(comparison_id)
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         except Exception as exc:
+            # Keep sensitive document content out of the response and logs, but
+            # retain the exception traceback in the local server console so an
+            # administrator can diagnose engine, permission and platform errors.
+            logger.exception("Comparison %s failed", comparison_id)
             store.delete(comparison_id)
             raise HTTPException(
                 status_code=500,
