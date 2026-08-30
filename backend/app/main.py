@@ -18,7 +18,12 @@ from .storage import ComparisonStore
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_STORAGE_ROOT = Path(__file__).resolve().parents[1] / ".runtime"
+DEFAULT_STORAGE_ROOT = Path(
+    os.getenv(
+        "POSTBANK_STORAGE_ROOT",
+        str(Path(__file__).resolve().parents[1] / ".runtime"),
+    )
+)
 MAX_UPLOAD_BYTES = int(os.getenv("POSTBANK_MAX_UPLOAD_BYTES", str(25 * 1024 * 1024)))
 DOWNLOAD_TTL_SECONDS = int(os.getenv("POSTBANK_DOWNLOAD_TTL_SECONDS", "900"))
 UPLOAD_CHUNK_BYTES = 1024 * 1024

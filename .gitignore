@@ -17,6 +17,7 @@ Thumbs.db
 .env.*
 !.env.example
 !**/.env.example
+!.env.compose.example
 
 # Local working documentation; intentionally excluded from this repository for now.
 README.md

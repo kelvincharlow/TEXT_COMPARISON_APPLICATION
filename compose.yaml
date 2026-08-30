@@ -1,0 +1,64 @@
+name: postbank-document-comparison
+
+services:
+  backend:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    init: true
+    environment:
+      POSTBANK_STORAGE_ROOT: /tmp/postbank-runtime
+      POSTBANK_MAX_UPLOAD_BYTES: ${POSTBANK_MAX_UPLOAD_BYTES:-26214400}
+      POSTBANK_DOWNLOAD_TTL_SECONDS: ${POSTBANK_DOWNLOAD_TTL_SECONDS:-900}
+    expose:
+      - "8000"
+    read_only: true
+    tmpfs:
+      - /tmp:size=1073741824,mode=1777
+    volumes:
+      - engine-cache:/app/poc/.engine-cache
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    mem_limit: ${POSTBANK_BACKEND_MEMORY_LIMIT:-2g}
+    cpus: ${POSTBANK_BACKEND_CPU_LIMIT:-2.0}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  frontend:
+    platform: linux/amd64
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${POSTBANK_BIND_ADDRESS:-127.0.0.1}:${POSTBANK_HTTP_PORT:-8080}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16777216,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 128
+    mem_limit: ${POSTBANK_FRONTEND_MEMORY_LIMIT:-128m}
+    cpus: ${POSTBANK_FRONTEND_CPU_LIMIT:-0.5}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  engine-cache:
