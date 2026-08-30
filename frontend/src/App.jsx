@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { compareDocuments, downloadRedline, releaseComparison } from "./api.js";
-
-const FILTERS = ["all", "addition", "deletion", "modification"];
+import postbankLogo from "./logo.jpg";
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -27,13 +26,23 @@ function DocumentIcon() {
 function UploadCard({ label, helper, file, onFile, disabled }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  const [validationError, setValidationError] = useState("");
 
   function accept(candidate) {
-    if (candidate) onFile(candidate);
+    if (!candidate) return;
+    const validation = onFile(candidate);
+    if (validation?.ok === false) {
+      setValidationError(validation.message);
+      return;
+    }
+    setValidationError("");
   }
 
   return (
-    <section className={`upload-card ${file ? "has-file" : ""}`} aria-label={`${label} document`}>
+    <section
+      className={`upload-card ${file ? "has-file" : ""} ${validationError ? "is-invalid" : ""}`}
+      aria-label={`${label} document`}
+    >
       <div className="upload-heading">
         <span className="step-badge">{label === "Original" ? "1" : "2"}</span>
         <div>
@@ -55,7 +64,12 @@ function UploadCard({ label, helper, file, onFile, disabled }) {
         onDrop={(event) => {
           event.preventDefault();
           setDragging(false);
-          accept(event.dataTransfer.files?.[0]);
+          const droppedFiles = event.dataTransfer.files;
+          if (droppedFiles?.length > 1) {
+            setValidationError("Please drag and drop one DOCX document at a time.");
+            return;
+          }
+          accept(droppedFiles?.[0]);
         }}
       >
         <input
@@ -63,7 +77,10 @@ function UploadCard({ label, helper, file, onFile, disabled }) {
           type="file"
           accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           disabled={disabled}
-          onChange={(event) => accept(event.target.files?.[0])}
+          onChange={(event) => {
+            accept(event.target.files?.[0]);
+            event.target.value = "";
+          }}
           tabIndex="-1"
           aria-hidden="true"
         />
@@ -71,7 +88,8 @@ function UploadCard({ label, helper, file, onFile, disabled }) {
         {file ? (
           <span className="selected-file">
             <strong>{file.name}</strong>
-            <span>{formatBytes(file.size)} · Ready to compare</span>
+            <span>{formatBytes(file.size)}</span>
+            <span className="upload-success"><span aria-hidden="true">✓</span> Document selected successfully</span>
           </span>
         ) : (
           <span className="drop-copy">
@@ -81,6 +99,11 @@ function UploadCard({ label, helper, file, onFile, disabled }) {
         )}
         <span className="browse-label">{file ? "Replace file" : "Browse files"}</span>
       </button>
+      {validationError && (
+        <p className="upload-validation" role="alert">
+          <span aria-hidden="true">!</span> {validationError}
+        </p>
+      )}
     </section>
   );
 }
@@ -144,20 +167,10 @@ function ChangeCard({ change }) {
   );
 }
 
-function SummaryCard({ label, count, kind }) {
-  return (
-    <div className={`summary-card ${kind}`}>
-      <span className="summary-number">{count}</span>
-      <span>{label}</span>
-    </div>
-  );
-}
-
 export default function App() {
   const [original, setOriginal] = useState(null);
   const [revised, setRevised] = useState(null);
   const [result, setResult] = useState(null);
-  const [filter, setFilter] = useState("all");
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -171,21 +184,20 @@ export default function App() {
     return () => window.clearInterval(timer);
   }, [result, downloaded, secondsLeft]);
 
-  const filteredChanges = useMemo(() => {
-    if (!result) return [];
-    return filter === "all"
-      ? result.changes
-      : result.changes.filter((change) => change.type === filter);
-  }, [filter, result]);
-
   function chooseFile(setter) {
     return (file) => {
       setError("");
       if (!file.name.toLowerCase().endsWith(".docx")) {
-        setError("Please choose a Word document ending in .docx.");
-        return;
+        return { ok: false, message: "This file cannot be used. Please select a Word document ending in .docx." };
+      }
+      if (file.size === 0) {
+        return { ok: false, message: "This document is empty. Please select a valid DOCX document." };
+      }
+      if (file.size > 25 * 1024 * 1024) {
+        return { ok: false, message: "This document is larger than the 25 MB limit." };
       }
       setter(file);
+      return { ok: true };
     };
   }
 
@@ -209,7 +221,6 @@ export default function App() {
       const data = await compareDocuments(original, revised);
       setResult(data);
       setSecondsLeft(data.download?.expires_in_seconds || 0);
-      setFilter("all");
       setStatus("complete");
       window.requestAnimationFrame(() => {
         document.getElementById("results")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -254,44 +265,30 @@ export default function App() {
     setRevised(null);
     setResult(null);
     setError("");
-    setFilter("all");
     setStatus("idle");
     setDownloaded(false);
     setSecondsLeft(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const summary = result?.summary;
   const isBusy = status === "comparing";
   const canDownload = result && !downloaded && secondsLeft > 0;
 
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="brand-mark" aria-label="Postbank Document Compare">
-          <span className="brand-symbol">P</span>
-          <span className="brand-copy">
-            <strong>Postbank</strong>
-            <small>Document Compare</small>
-          </span>
+        <div className="topbar-inner">
+          <div className="brand-mark" aria-label="Postbank Document Compare">
+            <img className="brand-logo" src={postbankLogo} alt="Postbank — My Bank, My Choice, My Future" />
+          </div>
         </div>
-        <div className="privacy-pill"><span className="privacy-dot" /> Internal processing</div>
       </header>
 
       <main>
-        <section className="hero">
-          <p className="eyebrow">DOCUMENT REVIEW TOOL</p>
-          <h1>See exactly what changed.</h1>
-          <p className="hero-copy">
-            Compare an original letter with its revised version. Your documents are processed locally
-            and are not kept as permanent history.
-          </p>
-        </section>
-
+        <p className="page-label">DOCUMENT REVIEW TOOL</p>
         <section className="workspace" aria-labelledby="compare-heading">
           <div className="section-title-row">
             <div>
-              <p className="section-kicker">NEW COMPARISON</p>
               <h2 id="compare-heading">Choose two Word documents</h2>
             </div>
             <span className="format-note">DOCX only · Maximum 25 MB each</span>
@@ -329,10 +326,6 @@ export default function App() {
           {error && <div className="error-banner" role="alert"><strong>Unable to continue.</strong> {error}</div>}
 
           <div className="action-row">
-            <div className="security-note">
-              <span className="lock-icon" aria-hidden="true">◆</span>
-              <span><strong>Private by design</strong><small>Files remain in the internal comparison environment.</small></span>
-            </div>
             <button
               className="primary-button"
               type="button"
@@ -355,38 +348,11 @@ export default function App() {
               <button className="secondary-button" type="button" onClick={startAgain}>Start another</button>
             </div>
 
-            <div className="summary-grid">
-              <SummaryCard label="Total changes" count={summary.total_changes} kind="total" />
-              <SummaryCard label="Additions" count={summary.additions} kind="addition" />
-              <SummaryCard label="Deletions" count={summary.deletions} kind="deletion" />
-              <SummaryCard label="Modifications" count={summary.modifications} kind="modification" />
-            </div>
-
-            <div className="results-toolbar">
-              <div className="filter-group" aria-label="Filter changes">
-                {FILTERS.map((item) => {
-                  const count = item === "all" ? summary.total_changes : summary[`${item}s`];
-                  return (
-                    <button
-                      type="button"
-                      key={item}
-                      className={filter === item ? "active" : ""}
-                      onClick={() => setFilter(item)}
-                      aria-pressed={filter === item}
-                    >
-                      {item === "all" ? "All" : `${item[0].toUpperCase()}${item.slice(1)}s`} <span>{count}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <span className="processing-time">Processed in {(result.processing_ms / 1000).toFixed(1)} seconds</span>
-            </div>
-
             <div className="change-list">
-              {filteredChanges.length ? filteredChanges.map((change) => (
+              {result.changes.length ? result.changes.map((change) => (
                 <ChangeCard key={change.id} change={change} />
               )) : (
-                <div className="empty-filter">No {filter}s were found.</div>
+                <p className="no-changes-message">No differences were found between these documents.</p>
               )}
             </div>
 
@@ -417,7 +383,7 @@ export default function App() {
             {result.coverage?.does_not_yet_support?.length > 0 && (
               <details className="coverage-note">
                 <summary>Current comparison coverage</summary>
-                <p>The on-screen summary does not yet report formatting-only changes, images, embedded objects, exact text-box locations, or page numbers. Review the Word redline before acting on material correspondence.</p>
+                <p>The on-screen change list does not yet report formatting-only changes, images, embedded objects, exact text-box locations, or page numbers. Review the Word redline before acting on material correspondence.</p>
                 {result.coverage?.redline_known_gaps?.length > 0 && (
                   <p className="coverage-warning">
                     The on-screen comparison found changes in {result.coverage.redline_known_gaps.join(" and ")},
