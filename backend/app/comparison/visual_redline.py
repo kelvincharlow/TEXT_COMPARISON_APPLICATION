@@ -30,7 +30,7 @@ LIGHT_BORDER = "D0D5DD"
 NEUTRAL_FILL = "F2F4F7"
 DELETION_FILL = "FDECEC"
 INSERTION_FILL = "E7F4EA"
-INSERTION_TEXT = "000000"
+INSERTION_TEXT = "008000"
 DELETION_TEXT = "FF0000"
 
 RPR_ORDER = {
@@ -110,7 +110,7 @@ def _set_run_style(run: etree._Element, style: str) -> None:
         properties = etree.Element(f"{{{W}}}rPr")
         run.insert(0, properties)
 
-    for name in ("color", "highlight", "strike"):
+    for name in ("color", "highlight", "strike", "shd", "noProof"):
         existing = properties.find(f"{{{W}}}{name}")
         if existing is not None:
             properties.remove(existing)
@@ -120,10 +120,18 @@ def _set_run_style(run: etree._Element, style: str) -> None:
         color.set(f"{{{W}}}val", INSERTION_TEXT)
         highlight = etree.SubElement(properties, f"{{{W}}}highlight")
         highlight.set(f"{{{W}}}val", "green")
+        shading = etree.SubElement(properties, f"{{{W}}}shd")
+        shading.set(f"{{{W}}}val", "clear")
+        shading.set(f"{{{W}}}fill", "C6EFCE")
+        etree.SubElement(properties, f"{{{W}}}noProof")
     elif style == "deletion":
         color = etree.SubElement(properties, f"{{{W}}}color")
         color.set(f"{{{W}}}val", DELETION_TEXT)
         etree.SubElement(properties, f"{{{W}}}strike")
+        shading = etree.SubElement(properties, f"{{{W}}}shd")
+        shading.set(f"{{{W}}}val", "clear")
+        shading.set(f"{{{W}}}fill", "FFC7CE")
+        etree.SubElement(properties, f"{{{W}}}noProof")
     _normalize_run_property_order(properties)
 
 

@@ -1,24 +1,62 @@
 name: postbank-document-comparison
 
 services:
-  backend:
-    platform: linux/amd64
+  postgres:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-postbank}
+      POSTGRES_USER: ${POSTGRES_USER:-postbank}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${POSTBANK_DB_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
     build:
       context: .
       dockerfile: backend/Dockerfile
+      target: runtime
+    environment: &database-environment
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-postbank}
+      POSTGRES_USER: ${POSTGRES_USER:-postbank}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: runtime
     restart: unless-stopped
     init: true
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     environment:
-      POSTBANK_STORAGE_ROOT: /tmp/postbank-runtime
+      <<: *database-environment
+      POSTBANK_STORAGE_ROOT: /app/data
+      POSTBANK_COOKIE_SECURE: ${POSTBANK_COOKIE_SECURE:-false}
       POSTBANK_MAX_UPLOAD_BYTES: ${POSTBANK_MAX_UPLOAD_BYTES:-26214400}
-      POSTBANK_DOWNLOAD_TTL_SECONDS: ${POSTBANK_DOWNLOAD_TTL_SECONDS:-900}
     expose:
       - "8000"
     read_only: true
     tmpfs:
       - /tmp:size=1073741824,mode=1777
     volumes:
-      - engine-cache:/app/poc/.engine-cache
+      - engine-cache:/app/engine-cache
+      - document-data:/app/data
     security_opt:
       - no-new-privileges:true
     cap_drop:
@@ -33,7 +71,6 @@ services:
         max-file: "5"
 
   frontend:
-    platform: linux/amd64
     build:
       context: frontend
       dockerfile: Dockerfile
@@ -61,4 +98,6 @@ services:
         max-file: "5"
 
 volumes:
+  postgres-data:
+  document-data:
   engine-cache:

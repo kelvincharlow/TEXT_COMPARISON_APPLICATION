@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-from compare_documents import ENGINES, compare_documents
+from backend.app.comparison.engine import ENGINES, compare_documents
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / "test_cases.json"

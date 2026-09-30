@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from backend.app.comparison import build_comparison_result
-from poc.compare_documents import compare_documents
+from backend.app.comparison.engine import compare_documents
 
 ROOT = Path(__file__).resolve().parents[2]
 SAMPLES = ROOT / "backend" / "tests" / "fixtures"

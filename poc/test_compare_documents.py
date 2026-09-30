@@ -6,7 +6,7 @@ import zipfile
 from io import BytesIO
 from pathlib import Path
 
-from compare_documents import (
+from backend.app.comparison.engine import (
     DocumentValidationError,
     highlight_tracked_changes,
     validate_docx,

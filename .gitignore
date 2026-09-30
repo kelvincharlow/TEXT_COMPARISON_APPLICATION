@@ -19,12 +19,20 @@ Thumbs.db
 !**/.env.example
 !.env.compose.example
 
-# Local working documentation; intentionally excluded from this repository for now.
-README.md
-PROJECT_STRUCTURE.md
-
 # Sample inputs and generated redlines may contain sensitive information.
 poc/samples/*.docx
 poc/outputs/*
 !poc/samples/.gitkeep
 !poc/outputs/.gitkeep
+
+# Local database and document recovery snapshots.
+.backups/
+
+# Local exports and editor state.
+presentation/
+*.dump
+*.sql
+*.sqlite
+*.sqlite3
+.idea/
+.vscode/

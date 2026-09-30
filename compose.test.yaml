@@ -1,0 +1,32 @@
+# Isolated integration environment: no application volumes or host ports.
+name: postbank-tests
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: postbank_test
+      POSTGRES_USER: postbank_test
+      POSTGRES_PASSWORD: disposable-test-only
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postbank_test -d postbank_test"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+  tests:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: test
+    init: true
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: postbank_test
+      POSTGRES_USER: postbank_test
+      POSTGRES_PASSWORD: disposable-test-only
+      POSTBANK_TEST_POSTGRES: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["sh", "-c", "python -m unittest discover -s backend/tests -t . -v && python -m unittest discover -s poc -t . -v"]

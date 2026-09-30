@@ -12,10 +12,7 @@ from pathlib import Path
 
 from lxml import etree
 
-try:
-    from .compare_documents import DocumentValidationError, validate_docx
-except ImportError:  # Allow direct execution: python poc/extract_changes.py
-    from compare_documents import DocumentValidationError, validate_docx
+from backend.app.comparison.engine import DocumentValidationError, validate_docx
 
 WORD_NAMESPACE = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 NAMESPACES = {"w": WORD_NAMESPACE}

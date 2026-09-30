@@ -1,0 +1,64 @@
+/* Shared visual hierarchy for staff, manager and administrator workspaces. */
+.ds-app { --ds-ink:#202b3b; --ds-muted:#637083; --ds-line:#e0e5ec; --ds-red:#b82032; --ds-gold:#a52638; --ds-accent-soft:#fbf0f2; --ds-surface-soft:#f5f6f8; background:#f3f5f8; }
+.ds-app .ds-page-heading h1 { font-size:32px; font-weight:750; letter-spacing:-.035em; color:#202b3b; }
+.ds-app .ds-page-heading p:not(.ds-eyebrow) { font-size:13px; color:#627083; }
+.ds-app .ds-eyebrow { color:#637083; font-weight:800; font-size:10px; }
+.ds-app .ds-sidebar { border-right-color:#dfe4eb; box-shadow:3px 0 18px #24334a04; }
+.ds-app .ds-sidebar nav button { font-size:13px; font-weight:650; color:#566276; padding-block:14px; }
+.ds-app .ds-sidebar nav button.is-active { background:var(--ds-accent-soft); color:#a52638; box-shadow:inset 3px 0 #b82032; }
+.ds-app .ds-sidebar nav button.is-active i { background:#b82032; }
+.ds-app .ds-nav-label { color:#717d8c; font-weight:800; }
+.ds-app .ds-department strong { font-size:14px; font-weight:750; }
+.ds-app .ds-department-icon { color:#586476; background:var(--ds-surface-soft); border-color:var(--ds-line); }
+.ds-app .ds-topbar { border-top:3px solid #a82b3d; }
+.ds-app .ds-breadcrumb strong { font-weight:700; color:#35435a; }
+.ds-app .ds-avatar { background:#edf0f4; color:#465367; font-weight:800; }
+.ds-app .ds-profile strong { font-size:12px; font-weight:750; }
+.ds-app .ds-card,.ds-app .ds-stat,.ds-app .ds-tab-panel { border-color:#e0e5ec; box-shadow:0 4px 18px #21324d05; border-radius:12px; }
+.ds-app .ds-stat { position:relative; overflow:hidden; padding-top:23px; }
+.ds-app .ds-stat::before { content:none; }
+
+.ds-app .ds-stat > div > span:first-child { font-size:12px; font-weight:650; color:#526075; }
+.ds-app .ds-stat > strong { font-size:34px; font-weight:750; color:#253248; margin-block:12px 8px; }
+.ds-app .ds-stat > small { color:#738095; font-size:11px; }
+.ds-app .ds-stat-icon { color:#59677b; background:#f0f2f6; }.ds-app .ds-stat-icon.gold { color:#59677b; background:#f0f2f6; }.ds-app .ds-stat-icon.rose { color:#59677b; background:#f0f2f6; }.ds-app .ds-stat-icon.green { color:#59677b; background:#f0f2f6; }
+.ds-app .ds-card-heading h2,.ds-app .ds-section-intro h2,.ds-app .review-panel h3,.ds-app .history-panel h2 { font-weight:750; font-size:17px; color:#2d3b50; }
+.ds-app .ds-card-heading p { font-size:12px; color:#6d798b; }
+.ds-app .ds-primary,.ds-app .primary-button { font-weight:750; background:var(--ds-red); box-shadow:0 3px 8px #a81f321c; }
+.ds-app .ds-primary:hover,.ds-app .primary-button:hover:not(:disabled) { background:#982034; }
+.ds-app .ds-secondary,.ds-app .secondary-button { color:#4c5d73; font-weight:650; border-color:#d6dee8; }
+.ds-app .ds-text-button { color:#a52638; font-size:12px; font-weight:750; }
+.ds-app .ds-icon-button { color:#586a80; }
+.ds-app .ds-file-tile { background:var(--ds-surface-soft); border-color:var(--ds-line); color:#59677b; }
+.ds-app .ds-document-title { font-weight:700; font-size:13px; color:#34445a; }
+.ds-app .ds-table th { background:#f5f7fa; color:#637188; font-size:11px; font-weight:700; }
+.ds-app .ds-table td { font-size:12px; color:#5f6e81; }.ds-app .ds-table tbody tr:hover { background:#f8f9fb; }
+.ds-app .ds-status { font-size:11px; font-weight:700; }.ds-app .ds-status i { width:5px; height:5px; }
+.ds-app .ds-status-available,.ds-app .ds-status-awaiting_final_approval { background:#fbefcd; color:#886319; }.ds-app .ds-status-in_review { background:#e8edf9; color:#465f98; }.ds-app .ds-status-approved { background:#e3f2e8; color:#2e7550; }.ds-app .ds-status-revision_required,.ds-app .ds-status-failed { background:#fbe7e9; color:#ac384c; }
+.ds-app .ds-filter-tabs button { font-size:12px; font-weight:650; color:#65748a; }.ds-app .ds-filter-tabs button[aria-pressed=true] { background:var(--ds-accent-soft); color:#a52638; font-weight:750; }
+.ds-app .ds-detail-tabs button { font-weight:650; }.ds-app .ds-detail-tabs button[aria-selected=true] { color:#a12238; border-bottom-color:#a12238; font-weight:750; }
+.ds-app .metadata-grid label,.ds-app .review-panel label { font-weight:650; color:#536278; }.ds-app .metadata-grid input,.ds-app .metadata-grid select,.ds-app textarea { font-size:13px; }
+.ds-app .review-panel p { color:#657386; font-size:13px; }.ds-app .review-issue h4 { color:#36475d; font-size:14px; font-weight:750; }.ds-app .review-confirm { background:var(--ds-surface-soft); border-color:var(--ds-line); color:#465367; }
+.ds-app .ad-workspace h2 { font-weight:750; color:#2d3b50; }.ds-app .ad-person strong { font-weight:750; }.ds-app .ad-user-table th { font-weight:700; background:#f5f7fa; }.ds-app .ad-role-tags span,.ds-app .ad-state,.ds-app .mg-issue-status { font-weight:700; }.ds-app .ad-role-card { border-top:1px solid var(--ds-line); }.ds-app .ad-role-card h2 { font-size:17px; }
+.ds-app .ds-login-notice { position:fixed; right:32px; top:90px; z-index:61; width:350px; max-width:calc(100vw - 32px); display:flex; align-items:center; gap:12px; padding:14px 12px 14px 16px; background:#fff; border:1px solid var(--ds-line); border-left:4px solid var(--ds-red); border-radius:10px; box-shadow:0 8px 28px #26334320; }
+.ds-login-notice-icon { display:flex; align-items:center; justify-content:center; flex:0 0 36px; height:36px; border-radius:10px; background:#fbf0f2; color:#a52638; }.ds-login-notice > div { flex:1; min-width:0; }.ds-login-notice strong { font-size:13px; font-weight:750; color:#354155; }.ds-login-notice p { font-size:11px; color:#708095; line-height:1.5; margin:4px 0 0; }.ds-app .ds-notice-icon { background:var(--ds-accent-soft); color:#a52638; border-color:#f0dfe3; }.ds-app .ds-section-intro > span { background:var(--ds-surface-soft); border-color:var(--ds-line); color:#586476; font-weight:700; }
+.ds-app .ad-role-tags span,.ds-app .ad-role-type,.ds-app .ds-format-badge { background:#f0f2f6; color:#536176; }
+.ds-app .ad-department-name svg,.ds-app .document-icon { color:#59677b; }
+.ds-app .ad-directory-row:hover { background:#f8f9fb; }
+.ds-app .ad-account .admin-roles label { background:var(--ds-surface-soft); }
+.ds-app .ad-account [role=note] { background:var(--ds-surface-soft); border-left-color:#8995a7; }
+.ds-app .ds-empty-icon,.ds-app .mg-issue-icon { background:#f0f2f6; color:#59677b; }
+.ds-app .mg-issue-status.needs-decision { background:#fbf0f2; color:#a52638; }
+.ds-app .ds-document-title:hover,.ds-app .browse-label { color:#a52638; }
+.ds-app summary,.ds-app .ds-document-kicker,.ds-app .ds-version-downloads a { color:#536176; }
+.ds-app .ds-notification-list article.is-unread { background:#fdf7f8; }
+.ds-app .ds-unread-dot { background:var(--ds-red); }
+.ds-app .ds-claim-banner { background:#f5f6f8; border-color:var(--ds-line); }
+.ds-app .ds-claim-banner strong { color:#354155; }.ds-app .ds-claim-banner p { color:var(--ds-muted); }
+.ds-app .ds-support,.ds-app .ds-support strong { color:#737e8e; }
+.ds-app button:focus-visible,.ds-app a:focus-visible,.ds-app summary:focus-visible { outline-color:var(--ds-red); }
+.ds-app input:focus,.ds-app select:focus,.ds-app textarea:focus { border-color:var(--ds-red); box-shadow:0 0 0 3px #b8203214; }
+.ds-app input[type=checkbox] { accent-color:var(--ds-red); }
+@media(max-width:650px) {
+ .ds-app .ds-page-heading h1 { font-size:27px; }.ds-app .ds-page-heading p:not(.ds-eyebrow) { font-size:12px; }.ds-app .ds-stat > strong { font-size:29px; }.ds-app .ds-stat > div > span:first-child { font-size:11px; }.ds-app .ds-stat > small { font-size:10px; }.ds-app .ds-document-title { font-size:12px; }.ds-app .ds-card-heading h2 { font-size:15px; }.ds-app .ds-text-button { font-size:11px; }.ds-app .ds-login-notice { right:16px; top:77px; }.ds-app .ds-status { font-size:10px; }
+}

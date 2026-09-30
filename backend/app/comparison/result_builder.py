@@ -6,6 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 from .raw_revision_parser import parse_raw_revisions
+from .page_mapper import add_page_mapping
 from .semantic_comparator import compare_semantic_changes
 
 
@@ -16,6 +17,7 @@ def build_comparison_result(
 ) -> dict[str, object]:
     raw_revisions = parse_raw_revisions(redline_path)
     changes = compare_semantic_changes(original_path, revised_path)
+    page_summary = add_page_mapping(changes, original_path, revised_path)
     counts = Counter(change["type"] for change in changes)
     semantic_parts = {str(change["location"]["part"]) for change in changes}
     raw_parts = {str(event["location"]["part"]) for event in raw_revisions}
@@ -38,6 +40,7 @@ def build_comparison_result(
             "raw_revision_events": len(raw_revisions),
             "semantic_changes": len(changes),
         },
+        "page_summary": page_summary,
         "coverage": {
             "body": True,
             "tables": True,
@@ -49,7 +52,6 @@ def build_comparison_result(
                 "formatting-only changes in the on-screen summary",
                 "images and embedded objects",
                 "text-box location labels",
-                "precise page numbers",
             ],
         },
     }

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from backend.app.comparison import build_comparison_result
 from backend.app.comparison.visual_redline import generate_visual_redline
-from poc.compare_documents import ComparisonResult, compare_documents, validate_docx
+from backend.app.comparison.engine import ComparisonResult, compare_documents, validate_docx
 
 
 def run_comparison(original_path: Path, revised_path: Path, output_path: Path) -> dict[str, object]:

@@ -5,7 +5,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from extract_changes import extract_changes
+from poc.extract_changes import extract_changes
 
 
 class ExtractChangesTests(unittest.TestCase):
